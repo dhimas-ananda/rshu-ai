@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: rshu-ai
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: rshu-db
+          property: connectionString
+    autoDeploy: true
+
+databases:
+  - name: rshu-db
+    plan: free
+    databaseName: rshu_ai
