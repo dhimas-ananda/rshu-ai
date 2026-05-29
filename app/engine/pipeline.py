@@ -146,6 +146,12 @@ class DiagnosisPipeline:
         kl_raw  = (kondisi_latar or "").strip()
         num_raw = text.strip()  # untuk numerik TTV
 
+        # Ekspansi singkatan assessment (AHKM, Rh+/-, BU meningkat, dll)
+        # Dilakukan SEBELUM strip narasi agar singkatan dikenali dulu
+        if km_raw:
+            from ..assessment_parser import expand_free_text
+            km_raw = expand_free_text(km_raw)
+
         if not ku_raw and not num_raw and not km_raw:
             return self._empty_result()
 
